@@ -14,6 +14,7 @@ The API combines:
 - `BattleRecordsRouter/` - main API project
 - `BattleRecordsRouter/Controllers/` - auth, admin, health, blockchain, and storage endpoints
 - `BattleRecordsRouter/RestTest/` - `.http` request samples
+- `database/` - SQL bootstrap scripts for required Supabase/Postgres tables
 - `docs/ERROR_HANDLING_GUIDE.md` - API error handling conventions
 
 ## Main API areas
@@ -61,6 +62,10 @@ For local development, prefer one of these approaches:
 - `BattleRecordsRouter/appsettings.Development.json` kept untracked
 - environment variables
 - Azure Key Vault-backed configuration
+
+To create the baseline Supabase/Postgres tables used by the current code, run:
+
+- `database/001_initial_supabase_schema.sql`
 
 ## Running locally
 
