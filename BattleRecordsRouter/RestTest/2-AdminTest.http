@@ -1,0 +1,84 @@
+﻿# 1. Pause the contract
+POST {{apiUrl}}/api/BlockchainStorage/admin/pause
+Content-Type: application/json
+accept: text/plain
+
+###
+# 2. Check if contract is paused
+GET {{apiUrl}}/api/BlockchainStorage/admin/paused
+accept: application/json
+
+###
+
+# 3. Unpause the contract
+POST {{apiUrl}}/api/BlockchainStorage/admin/unpause
+Content-Type: application/json
+accept: text/plain
+
+###
+
+# 6. Grant moderator role to an account
+POST {{apiUrl}}/api/BlockchainStorage/admin/moderator/{{address0}}/grant
+Content-Type: application/json
+accept: text/plain
+
+###
+
+# 8. Check if an account has a role
+GET {{apiUrl}}/api/BlockchainStorage/admin/role/MODERATOR_ROLE/{{address0}}
+accept: application/json
+
+###
+# 7. Revoke moderator role from an account
+POST {{apiUrl}}/api/BlockchainStorage/admin/moderator/{{address0}}/revoke
+Content-Type: application/json
+accept: text/plain
+
+###
+
+# 9. Grant custom role to an account
+POST {{apiUrl}}/api/BlockchainStorage/admin/role/{{roleName}}/{{address0}}/grant
+Content-Type: application/json
+accept: text/plain
+
+###
+
+# 10. Revoke custom role from an account
+POST {{apiUrl}}/api/BlockchainStorage/admin/role/{{roleName}}/{{address0}}/revoke
+Content-Type: application/json
+accept: text/plain
+
+###
+
+# 4. Ban a player (e.g. player index 7)
+POST {{apiUrl}}/api/BlockchainStorage/admin/player/{{playerIndex0}}/ban
+Content-Type: application/json
+accept: text/plain
+
+###
+
+# 11. Get banned player by index in array position (not by user index)
+GET {{apiUrl}}/api/BlockchainStorage/admin/player/banned/0
+accept: application/json
+
+###
+
+# 12. Get all banned players
+GET {{apiUrl}}/api/BlockchainStorage/admin/player/banned
+accept: application/json
+
+###
+
+# 13. Check if a player is banned
+GET {{apiUrl}}/api/BlockchainStorage/admin/player/{{playerIndex0}}/is-banned
+accept: application/json
+
+###
+
+# 5. Unban a player (e.g. player index 7)
+POST {{apiUrl}}/api/BlockchainStorage/admin/player/{{playerIndex0}}/unban
+Content-Type: application/json
+accept: text/plain
+
+
+

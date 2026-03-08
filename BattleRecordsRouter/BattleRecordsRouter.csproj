@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <SelfContained>true</SelfContained>
+        <PublishReadyToRun>true</PublishReadyToRun>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <Version>1.0.0</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.4.0" />
+        <PackageReference Include="Azure.Identity" Version="1.17.1" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.11" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.11" />
+        <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="9.0.11" />
+        <PackageReference Include="Nethereum.RPC" Version="5.0.0" />
+        <PackageReference Include="Nethereum.Siwe" Version="5.0.0" />
+        <PackageReference Include="Nethereum.Siwe.Core" Version="5.0.0" />
+        <PackageReference Include="Nethereum.Web3" Version="5.0.0" />
+        <PackageReference Include="Nethereum.Contracts" Version="5.0.0" />
+        <PackageReference Include="Nethereum.JsonRpc.Client" Version="5.0.0" />
+        <PackageReference Include="Supabase" Version="1.1.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Helper\Blockchain\" />
+    </ItemGroup>
+
+</Project>

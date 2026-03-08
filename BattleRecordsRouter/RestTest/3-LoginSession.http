@@ -1,0 +1,66 @@
+﻿
+# 1. Start a login session
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/start
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": 3,
+  "applicationId": 0,
+  "startTime": "{{$timestamp}}",
+  "device": 3
+}
+
+> {%
+    client.global.set("sessionId", response.body.sessionId);
+%}
+
+
+###
+
+# 3. Set login session metadata
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/metadata
+Content-Type: application/json
+accept: application/json
+
+{
+  "sessionId": {{sessionId}},
+  "key": "location",
+  "value": "Canada"
+}
+
+###
+
+# 4. Get active login sessions (returns session IDs)
+GET {{apiUrl}}/api/BlockchainStorage/sessions/sessionsactive
+accept: application/json
+
+###
+
+# 6. Get all players in sessions currently
+GET {{apiUrl}}/api/BlockchainStorage/sessions/playersactive
+accept: application/json
+
+###
+
+# 5. Get total number of login sessions
+GET {{apiUrl}}/api/BlockchainStorage/sessions/count
+accept: application/json
+
+###
+
+# 6. Get login session details by session ID
+GET {{apiUrl}}/api/BlockchainStorage/sessions/login/{{sessionId}}
+accept: application/json
+
+###
+
+# 2. End a login session
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "sessionId": {{sessionId}},
+  "endTime": "{{$timestamp}}"
+}

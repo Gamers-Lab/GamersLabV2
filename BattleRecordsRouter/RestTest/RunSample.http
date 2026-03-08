@@ -1,0 +1,439 @@
+﻿# ========== Developer Environment ==========
+@apiUrl = http://127.0.0.1:5036
+
+@playerId0 = NPC-1
+@playerId1 = NPC-2
+@playerId2 = Human-1
+@playerId3 = Human-2
+@playerId4 = Human-3
+
+@address0 = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+@address1 = 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+@address2 = 0xf39Fd6e51aad88f6f4ce6ab8827279cfffb92266
+@address3 = 0x90F79bf6EB2c4f870365E785982E1f101E93b906
+@address4 = 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+
+# ========== 1. Create Application ==========
+POST {{apiUrl}}/api/BlockchainStorage/application/name
+Content-Type: application/json
+accept: application/json
+
+{
+  "name": "Test Application"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/application/record
+Content-Type: application/json
+accept: application/json
+
+{
+  "applicationVersion": "v1.0",
+  "companyName": "Test Company",
+  "contractAddresses": [
+    "{{address0}}"
+  ]
+}
+
+> {%
+    client.global.set("applicationId", 0);
+%}
+
+###
+
+# ========== 2. Create Players ==========
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId0}}",
+  "playerType": 1,
+  "playerAddress": "{{address0}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId1}}",
+  "playerType": 1,
+  "playerAddress": "{{address1}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId2}}",
+  "playerType": 0,
+  "playerAddress": "{{address2}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId3}}",
+  "playerType": 0,
+  "playerAddress": "{{address3}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId4}}",
+  "playerType": 0,
+  "playerAddress": "{{address4}}"
+}
+
+###
+
+# ========== 3. Start Login Sessions ==========
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/start
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": 0,
+  "applicationId": {{applicationId}},
+  "device": 3,
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/start
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": 1,
+  "applicationId": {{applicationId}},
+  "device": 3,
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/start
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": 2,
+  "applicationId": {{applicationId}},
+  "device": 3,
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/start
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": 3,
+  "applicationId": {{applicationId}},
+  "device": 3,
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/start
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": 4,
+  "applicationId": {{applicationId}},
+  "device": 3,
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+# ========== 4. Start Match Session (Players 0, 1, 2) ==========
+POST {{apiUrl}}/api/BlockchainStorage/match/sessions/start
+Content-Type: application/json
+accept: application/json
+
+{
+  "applicationId": {{applicationId}},
+  "startTime": "{{$timestamp}}",
+  "multiplayer": true,
+  "playerIds": [0, 1, 2],
+  "level": "Arena"
+}
+
+> {%
+    client.global.set("matchSessionId", response.body.matchSessionId);
+%}
+
+###
+
+# ========== 5. Add Players Later (Players 3 and 4) ==========
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/add
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 3,
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/add
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 4,
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+# ========== 6. Set Records (for all players) ==========
+POST {{apiUrl}}/api/BlockchainStorage/records
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 0,
+  "score": 9000,
+  "key": "achievement",
+  "value": "First Blood",
+  "otherPlayers": [],
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/records
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 1,
+  "score": 7500,
+  "key": "achievement",
+  "value": "Assist King",
+  "otherPlayers": [],
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/records
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 2,
+  "score": 6000,
+  "key": "achievement",
+  "value": "Sharpshooter",
+  "otherPlayers": [],
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/records
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 3,
+  "score": 4500,
+  "key": "achievement",
+  "value": "Tank",
+  "otherPlayers": [],
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/records
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 4,
+  "score": 3000,
+  "key": "achievement",
+  "value": "Late Joiner",
+  "otherPlayers": [],
+  "startTime": "{{$timestamp}}"
+}
+
+###
+
+# ========== 7. Update Play Data (end play for all players) ==========
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 0,
+  "endTime": "{{$timestamp}}",
+  "score": 9000,
+  "winLoss": 0,
+  "matchPosition": 1
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 1,
+  "endTime": "{{$timestamp}}",
+  "score": 7500,
+  "winLoss": 1,
+  "matchPosition": 2
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 2,
+  "endTime": "{{$timestamp}}",
+  "score": 6000,
+  "winLoss": 1,
+  "matchPosition": 3
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 3,
+  "endTime": "{{$timestamp}}",
+  "score": 4500,
+  "winLoss": 1,
+  "matchPosition": 4
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 4,
+  "endTime": "{{$timestamp}}",
+  "score": 3000,
+  "winLoss": 2,
+  "matchPosition": 5
+}
+
+###
+
+# ========== 8. End Match Session ==========
+POST {{apiUrl}}/api/BlockchainStorage/match/sessions/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "endTime": "{{$timestamp}}"
+}
+
+###
+
+# ========== 9. End Login Sessions ==========
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "sessionId": 0,
+  "endTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "sessionId": 1,
+  "endTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "sessionId": 2,
+  "endTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "sessionId": 3,
+  "endTime": "{{$timestamp}}"
+}
+
+###
+
+POST {{apiUrl}}/api/BlockchainStorage/sessions/login/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "sessionId": 4,
+  "endTime": "{{$timestamp}}"
+}
+
+###

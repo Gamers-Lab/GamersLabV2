@@ -1,0 +1,16 @@
+bin/
+obj/
+publish/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+appsettings.json
+/BattleRecordsRouter/appsettings.json
+/BattleRecordsRouter/appsettings.Development.json
+**/http-client.env.json

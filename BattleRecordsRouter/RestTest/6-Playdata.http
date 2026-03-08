@@ -1,0 +1,60 @@
+﻿@matchSessionId = 2
+
+###
+
+# 1. Add player to a match session
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/add
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": {{matchSessionId}},
+  "playerIndex": 1,
+  "startTime": "{{$timestamp}}"
+}
+
+> {%
+    client.global.set("playDataId", response.body.playDataId);
+%}
+
+
+###
+
+# 2. Update play data for a match session
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": "{{matchSessionId}}",
+  "playerIndex": 0,
+  "endTime": "{{$timestamp}}",
+  "score": 1200,
+  "winLoss": 1,
+  "matchPosition": 1
+}
+
+###
+
+# 3. Add metadata to a play data record
+POST {{apiUrl}}/api/BlockchainStorage/match/playdata/metadata
+Content-Type: application/json
+accept: application/json
+
+{
+  "playDataId": 0,
+  "key": "mapName",
+  "value": "Arena Alpha"
+}
+
+###
+
+# 4. Get play data by index
+GET {{apiUrl}}/api/BlockchainStorage/match/playdata/index/0
+accept: application/json
+
+###
+
+# 5. Get total number of play data records
+GET {{apiUrl}}/api/BlockchainStorage/match/playdata/count
+accept: application/json

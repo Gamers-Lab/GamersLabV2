@@ -1,0 +1,29 @@
+﻿@apiUrl        = http://127.0.0.1:5036
+@walletAddress = 0x6552556089C196363De67A9F6d244BEEce35d013
+@nonce         = {{nonce}}
+@signature     = PASTE_SIGNATURE_HERE
+@jwt           = {{jwt}}
+
+### 1️⃣  Request a one‑time nonce
+POST {{apiUrl}}/authentication/request-nonce
+Content-Type: application/json
+
+{
+  "address": "{{walletAddress}}"
+}
+
+### 2️⃣  — Sign the nonce in your wallet —
+# put the resulting signature (0x…) into @signature above
+
+### 3️⃣  Submit signature  →  receive JWT   👈 new route
+POST {{apiUrl}}/authentication/submit-signature
+Content-Type: application/json
+
+{
+  "address": "{{walletAddress}}",
+  "signature": "{{signature}}"
+}
+
+### 4️⃣  Call a protected endpoint using the JWT
+GET {{apiUrl}}/authentication/me
+Authorization: Bearer {{jwt}}

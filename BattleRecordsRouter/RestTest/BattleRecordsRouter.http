@@ -1,0 +1,43 @@
+# Variables
+@nodeUrl = http://127.0.0.1:8545
+@apiUrl = http://127.0.0.1:5036
+
+###
+
+# 1. Test Ethereum node is running
+POST {{nodeUrl}}
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "method": "eth_accounts",
+    "params": [],
+    "id": 1
+}
+
+###
+
+# 2. Set Application Name (using HTTP explicitly)
+POST {{apiUrl}}/api/BlockchainStorage/application/name
+accept: text/plain
+Content-Type: application/json
+
+{
+  "name": "bobbs"
+}
+
+###
+
+# Test if OnChainDataStorage contract exists
+POST {{nodeUrl}}
+Content-Type: application/json
+
+{
+    "jsonrpc": "2.0",
+    "method": "eth_getCode",
+    "params": [
+        "0x0165878a594ca255338adfa4d48449f69242eb8f",
+        "latest"
+    ],
+    "id": 1
+}

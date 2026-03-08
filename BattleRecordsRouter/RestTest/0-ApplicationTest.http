@@ -1,0 +1,242 @@
+﻿# ========== Application Management Tests ==========
+# Variables - Update adminPassword with your actual admin password from appsettings
+@adminPassword = Azure-KeyVault
+
+# Note: adminToken and applicationId are stored as global variables
+# by the response handlers. They are NOT defined as in-place variables here
+# to avoid conflicts with global variables.
+
+###############################################################################
+# AUTHENTICATION SETUP
+# IMPORTANT: Run Step 0 FIRST before running any other tests!
+# This step will populate the {{adminToken}} variable.
+###############################################################################
+
+### Step 0: Get Admin Token
+# @name GetAdminToken
+POST {{apiUrl}}/api/Auth/wallet/login/admin
+Content-Type: application/json
+accept: application/json
+
+{
+  "password": "{{adminPassword}}"
+}
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.test("Should return JWT token", function() {
+        client.assert(response.body.jwt !== undefined, "Expected jwt");
+    });
+    client.global.set("adminToken", response.body.jwt);
+    client.log("Admin token obtained: " + response.body.jwt.substring(0, 30) + "...");
+%}
+
+###############################################################################
+# APPLICATION MANAGEMENT TESTS
+###############################################################################
+
+###
+
+#1. Set Application Name (Admin Only)
+# @name SetApplicationName
+POST {{apiUrl}}/api/Admin/application/name
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+accept: application/json
+
+{
+  "Name": "Super Mario"
+}
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.test("Should return transaction hash", function() {
+        client.assert(response.body.transactionHash !== undefined, "Expected transactionHash");
+    });
+    client.log("Application name set. TxHash: " + response.body.transactionHash);
+%}
+
+###
+
+#2. Get Application Name and Owner
+# @name GetApplicationName
+GET {{apiUrl}}/api/Admin/application/name
+accept: application/json
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.test("Should return application details", function() {
+        client.assert(response.body.name !== undefined, "Expected name");
+        client.assert(response.body.owner !== undefined, "Expected owner");
+    });
+    client.log("Application Name: " + response.body.name + ", Owner: " + response.body.owner);
+%}
+
+###
+
+#3. Create Application Record (Admin Only)
+# @name CreateApplicationRecord
+POST {{apiUrl}}/api/Admin/application/record
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+accept: application/json
+
+{
+  "ApplicationVersion": "v1",
+  "CompanyName": "Nintendo",
+  "ContractAddresses": [
+    "0x0000000000000000000000000000000000000001",
+    "0x0000000000000000000000000000000000000002"
+  ]
+}
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.test("Should return transaction hash and record ID", function() {
+        client.assert(response.body.transactionHash !== undefined, "Expected transactionHash");
+        client.assert(response.body.id !== undefined, "Expected id");
+    });
+    client.global.set("applicationId", response.body.id);
+    client.log("Application record created. ID: " + response.body.id + ", TxHash: " + response.body.transactionHash);
+%}
+
+###
+
+#4a. Set Metadata for Application Record (Admin Only)
+# @name SetApplicationMetadataPublisher
+# Note: Uses record ID 0 (first record, 0-indexed)
+POST {{apiUrl}}/api/Admin/application/record/metadata
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+accept: application/json
+
+{
+  "RecordId": 0,
+  "Key": "Publisher",
+  "Value": "Uprising Labs"
+}
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.test("Should return transaction hash", function() {
+        client.assert(response.body.transactionHash !== undefined, "Expected transactionHash");
+    });
+    client.log("Metadata 'Publisher' set. TxHash: " + response.body.transactionHash);
+%}
+
+###
+
+#4b. Set Metadata for Application Record (Admin Only)
+# @name SetApplicationMetadataSystem
+# Note: Uses record ID 0 (first record, 0-indexed)
+POST {{apiUrl}}/api/Admin/application/record/metadata
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+accept: application/json
+
+{
+  "RecordId": 0,
+  "Key": "System",
+  "Value": "NES"
+}
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.test("Should return transaction hash", function() {
+        client.assert(response.body.transactionHash !== undefined, "Expected transactionHash");
+    });
+    client.log("Metadata 'System' set. TxHash: " + response.body.transactionHash);
+%}
+
+###
+
+#5. Update Contract Addresses for Application Record (Admin Only)
+# @name UpdateContractAddresses
+# Note: Uses record ID 0 (first record, 0-indexed)
+POST {{apiUrl}}/api/Admin/application/record/addresses
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+accept: application/json
+
+{
+  "RecordId": 0,
+  "ContractAddresses": [
+    "0x0000000000000000000000000000000000000003",
+    "0x0000000000000000000000000000000000000004"
+  ]
+}
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.test("Should return transaction hash", function() {
+        client.assert(response.body.transactionHash !== undefined, "Expected transactionHash");
+    });
+    client.log("Contract addresses updated. TxHash: " + response.body.transactionHash);
+%}
+
+###
+
+#6. Get Latest Application Record ID
+# @name GetLatestApplicationRecordId
+GET {{apiUrl}}/api/Admin/application/record/latest
+accept: application/json
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.log("Latest Application Record ID: " + response.body);
+%}
+
+###
+
+#7. Get Application Record by ID
+# @name GetApplicationRecordById
+# Note: Uses record ID 0 (first record, 0-indexed)
+GET {{apiUrl}}/api/Admin/application/record/0
+accept: application/json
+
+> {%
+    client.test("Should return 200 OK", function() {
+        client.assert(response.status === 200, "Expected 200 status");
+    });
+    client.test("Should return application record details", function() {
+        client.assert(response.body.applicationVersion !== undefined, "Expected applicationVersion");
+        client.assert(response.body.companyName !== undefined, "Expected companyName");
+        client.assert(response.body.contractAddresses !== undefined, "Expected contractAddresses");
+    });
+    client.log("Application Record - Version: " + response.body.applicationVersion + ", Company: " + response.body.companyName);
+%}
+
+###############################################################################
+# SUMMARY
+###############################################################################
+# Total Tests: 8
+#
+# Coverage:
+# - Step 0: Get Admin Token (Authentication)
+# - Test 1: Set Application Name (Admin)
+# - Test 2: Get Application Name and Owner (Anonymous)
+# - Test 3: Create Application Record (Admin)
+# - Test 4a: Set Application Metadata - Publisher (Admin)
+# - Test 4b: Set Application Metadata - System (Admin)
+# - Test 5: Update Contract Addresses (Admin)
+# - Test 6: Get Latest Application Record ID (Anonymous)
+# - Test 7: Get Application Record by ID (Anonymous)
+###############################################################################
+
+

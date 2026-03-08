@@ -1,0 +1,151 @@
+﻿
+# 1. Create a new NPC player
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "numba2",
+  "playerType": 0, 
+  "playerAddress": "0xD10B931EfAc4c0729A72E7c098e0d3024d23b077"
+}
+
+###
+
+# 1. Create a new NPC player
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId1}}",
+  "playerType": 0, 
+  "playerAddress": "{{address1}}"
+}
+
+###
+
+# 1. Create a new Human player
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId2}}",
+  "playerType": 1, 
+  "playerAddress": "{{address2}}"
+}
+
+
+###
+
+# 1. Create a new Human player
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId3}}",
+  "playerType": 1, 
+  "playerAddress": "{{address3}}"
+}
+
+
+###
+
+# 1. Create a new Human player
+POST {{apiUrl}}/api/BlockchainStorage/players/create
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerId": "{{playerId4}}",
+  "playerType": 1, 
+  "playerAddress": "{{address4}}"
+}
+
+
+###
+
+# 2. Add a custom player identifier (e.g., Steam ID)
+POST {{apiUrl}}/api/BlockchainStorage/players/identifier
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": {{playerIndex2}},
+  "identifierType": "steam",
+  "identifierValue": "apples"
+}
+
+###
+
+# 3. Get player index by unique player ID (username). Returns index number.
+GET {{apiUrl}}/api/BlockchainStorage/players/index/{{playerId0}}
+accept: application/json
+
+###
+
+# 4. Get player ID from player index. Returns user ID string.
+GET {{apiUrl}}/api/BlockchainStorage/players/id/0
+accept: application/json
+
+###
+
+# 5 manual check
+GET {{apiUrl}}/api/BlockchainStorage/players/index/unityUserxxx
+accept: application/json
+
+###
+
+# 6. Get player index by Ethereum address
+GET {{apiUrl}}/api/BlockchainStorage/players/lookup/by-address/{{address0}}
+accept: application/json
+
+###
+
+# 7. Update player score
+POST {{apiUrl}}/api/BlockchainStorage/players/score
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": {{playerIndex2}},
+  "newScore": 1500
+}
+
+###
+
+# 8. Add verified address to player
+POST {{apiUrl}}/api/BlockchainStorage/players/verified-address
+Content-Type: application/json
+accept: application/json
+
+{
+  "playerIndex": {{playerIndex2}},
+  "verifiedAddress": "0x2222222222222222222222222222222222222221"
+}
+
+###
+# 9 Get player score
+GET {{apiUrl}}/api/BlockchainStorage/players/score/{{playerIndex2}}
+accept: application/json
+
+###
+
+# get player struct by player index
+GET {{apiUrl}}/api/BlockchainStorage/players/0
+accept: application/json
+
+###
+
+# Get total number of players
+GET {{apiUrl}}/api/BlockchainStorage/players/count
+accept: application/json
+
+###
+
+GET {{apiUrl}}/api/BlockchainStorage/diagnostics
+accept: application/json
+
+

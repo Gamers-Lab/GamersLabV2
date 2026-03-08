@@ -1,0 +1,76 @@
+﻿
+# 1. Submit a new gameplay record
+POST {{apiUrl}}/api/BlockchainStorage/records
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": 1,
+  "playerIndex": 0,
+  "score": 9000,
+  "key": "achievement",
+  "value": "First Blood",
+  "otherPlayers": [0, 3],
+  "startTime": {{$timestamp}}
+}
+
+###
+
+# 2. Retrieve a record by its index
+GET {{apiUrl}}/api/BlockchainStorage/records/0
+accept: application/json
+
+###
+
+# 3. Retrieve all record IDs created by a specific player
+GET {{apiUrl}}/api/BlockchainStorage/records/player/{{playerIndex}}
+accept: application/json
+
+###
+
+# 4. Submit multiple gameplay records in a single transaction
+POST {{apiUrl}}/api/BlockchainStorage/records/batch
+Content-Type: application/json
+accept: application/json
+
+{
+  "records": [
+    {
+      "matchSessionId": 1,
+      "playerIndex": 0,
+      "score": 9500,
+      "key": "achievement",
+      "value": "Double Kill",
+      "otherPlayers": [1, 2],
+      "startTime": {{$timestamp}}
+    },
+    {
+      "matchSessionId": 1,
+      "playerIndex": 0,
+      "score": 8000,
+      "key": "achievement",
+      "value": "Headshot",
+      "otherPlayers": [3],
+      "startTime": {{$timestamp}}
+    },
+    {
+      "matchSessionId": 1,
+      "playerIndex": 0,
+      "score": 7500,
+      "key": "achievement",
+      "value": "Killing Spree",
+      "otherPlayers": [],
+      "startTime": {{$timestamp}}
+    }
+  ]
+}
+
+> {%
+    client.global.set("batchRecordIds", response.body.recordIds);
+%}
+
+###
+
+# 5. Retrieve a batch-created record by its index
+GET {{apiUrl}}/api/BlockchainStorage/records/{{batchRecordIds[0]}}
+accept: application/json

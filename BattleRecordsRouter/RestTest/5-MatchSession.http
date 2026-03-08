@@ -1,0 +1,75 @@
+﻿
+###
+
+# 1. Start a new match session
+POST {{apiUrl}}/api/BlockchainStorage/match/sessions/start
+Content-Type: application/json
+accept: application/json
+
+{
+  "applicationId": 0,
+  "startTime": "{{$timestamp}}",
+  "multiplayer": true,
+  "playerIds": [
+    0,
+    2,
+    3
+  ],
+  "level": "Coliseum"
+}
+
+> {%
+    client.global.set("matchSessionId", response.body.matchSessionId);
+%}
+
+###
+
+# 3. Add metadata to a match session
+POST {{apiUrl}}/api/BlockchainStorage/match/sessions/metadata
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": {{matchSessionId}},
+  "key": "weather",
+  "value": "stormy"
+}
+
+###
+
+# 4. Get active sessions for a player //todo fix error here
+GET {{apiUrl}}/api/BlockchainStorage/match/sessions/active/1
+accept: application/json
+
+###
+
+# 5. Get total number of match sessions //todo fix error
+GET {{apiUrl}}/api/BlockchainStorage/match/sessions/count
+accept: application/json
+
+###
+
+# 6. Get all active match sessions across all players //todo fix error
+GET {{apiUrl}}/api/BlockchainStorage/match/sessions/all
+accept: application/json
+
+###
+
+
+###
+
+#8Get match session by index (ABI-based getter)
+GET {{apiUrl}}/api/BlockchainStorage/match/sessions/index/{{matchSessionId}}
+accept: application/json
+
+###
+
+# 2. End a match session
+POST {{apiUrl}}/api/BlockchainStorage/match/sessions/end
+Content-Type: application/json
+accept: application/json
+
+{
+  "matchSessionId": {{matchSessionId}},
+  "endTime": "{{$timestamp}}"
+}
