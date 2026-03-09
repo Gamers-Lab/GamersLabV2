@@ -14,6 +14,7 @@ The API combines:
 - `BattleRecordsRouter/` - main API project
 - `BattleRecordsRouter/Controllers/` - auth, admin, health, blockchain, and storage endpoints
 - `BattleRecordsRouter/RestTest/` - `.http` request samples
+- `blockchain/contracts/` - Solidity smart contracts used by the API's blockchain flows
 - `database/` - SQL bootstrap scripts for required Supabase/Postgres tables
 - `docs/ERROR_HANDLING_GUIDE.md` - API error handling conventions
 
@@ -30,6 +31,7 @@ The API combines:
 - `.NET 9`
 - `ASP.NET Core`
 - `Nethereum`
+- `Solidity`
 - `Supabase`
 - `Swagger / Swashbuckle`
 - `Azure Key Vault` support for production secret loading
@@ -87,6 +89,18 @@ In development, Swagger UI is available at:
 ## Testing requests
 
 Sample HTTP requests live in `BattleRecordsRouter/RestTest/` and can be run from IDE HTTP clients after supplying local environment values.
+
+## Smart contracts
+
+The Solidity contracts used by the application are included under `blockchain/contracts/`.
+
+Notable files include:
+
+- `CoreFunctions.sol` - primary contract logic surface
+- `AdminLib.sol` - admin-oriented contract operations
+- `RecordLib.sol` - record-related write/read helpers
+- `MatchSessionLib.sol` - match session contract logic
+- `EntityLib.sol` and `DataTypes.sol` - shared entities and data structures
 
 ## Security
 
