@@ -1,5 +1,7 @@
 # GamersLabV2
 
+> Deprecated: This repository is no longer the current version of the platform and is retained for reference only. Gamers Lab V3 is now the active successor.
+
 `GamersLabV2` is an ASP.NET Core 9 Web API for game-facing authentication, player/session record handling, and blockchain-backed write operations used by the Gamers Lab platform.
 
 The API combines:
